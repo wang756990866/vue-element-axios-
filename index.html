@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="css/bg.css" />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	</head>
+	<body>
+    <div id="app" class="conment">
+      <div class="top">
+        <img src="img/TopBg.png" />
+      </div>
+      <div style="height: 1rem
+      ;"></div>
+      <div class="conmentVal ">
+        <span>&nbsp;<br/></span>
+        <span class="titleVal">朱子家训</span>
+        <div class="subject ">
+          <span class="fontVal ">《朱子家训》又名《朱子治家格言》、《朱柏庐治家格言》，全篇524字 ，主要涉及修身、齐家、治学、做事等内容，自问世以来流传甚广，被历代尊为“治家之经”。</span>
+          <br />
+          <span class="fontVal">《朱子家训》认为修身渗透在社会生活和个人生活的点点滴滴之中，日常生活的活动就蕴含着修身的灵魂，起居有节，整理家务，勤劳不辍，这就是修身。此外，修身要从个人
+          生活的俭朴、珍惜物力做起，力戒奢靡和虚荣。</span>
+          <br />
+          <span class="fontVal">
+            《朱子家训》在家庭教育上强调身教、言教和书教的结合。自身要言行真诚朴实不虚荣不虚伪，不要花言巧语，更不要胡言乱语，身教胜言教，孩子好习惯的养成在家庭生活中的耳濡目染很关键。教育
+            孩子要以道义为标准，要合乎大道和正义，要合规矩讲方法，尤其强调让孩子读书的重要性。
+          </span>
+          <br />
+          <span class="fontVal">
+            《朱子家训》认为读书治学，不仅关乎个人的修养和家庭或者家族的发展，而且要与国家的治乱兴亡紧密结合，体现了贤明高尚的爱国精神。《朱子家训》说:“读书志在圣贤，为官心存君国。”这就使
+            《朱子家训》强调的读书治学超越了个人私利狭隘的局限，而升华为富有家国情怀的爱国精神。
+          </span>
+          <br />
+          <span class="fontVal">
+            《朱子家训》认为做事首先要做人，做人首先要正确地处理人际关系，因此提出了他的为人处世之道：一是首先要和宗族，求得家门和顺。二是要与人为善，多自我反思。三是“施惠勿念，受恩莫忘”，
+            见善则喜，见患则忧。四是做事进退有据，留有余地，不要涸泽而渔。
+          </span>
+          <br />
+          <span class="fontVal">
+            《朱子家训》对人生进行了一个总体的概括：“守分安命，顺时听天。为人如此，庶乎近矣。”就是告诉人们“做人做事都是有天然的分寸、限度、规则的，要顺其自然，安时处顺，不要勉强而为，更不
+            要急功近利铤而走险，如果能够有原则有分寸有限度的顺其自然去做人做事就接近圣贤的境界了。”
+          </span>
+          <br />
+          <span class="fontVal">
+            党员干部的家风好不好，需要党员干部发挥好“掌门人”的主导作用。党员干部只有以身作则，从自身做起，恪守家规、传承良好家风，才能为家人作出表率，才会让这个家庭长久不衰。
+          </span>
+          <br />
+        </div>
+      </div>
+      <div class="functionVal">
+        <div class="isFont" style="margin-left: -2rem;">
+          {{isFont}}
+        </div>
+        <div>
+          <el-row>
+            <el-col :span="4" class="isFont">
+              {{startTime}}
+            </el-col>
+            <el-col :span="15" class="block">
+              <el-slider v-model="isTime" :show-tooltip="false" @change="updateSlider()"></el-slider>
+            </el-col>
+            <el-col :span="4" class="isFont">
+              {{endTime}}
+            </el-col>
+          </el-row>
+        </div>
+        <el-row>
+          <el-col :span="24" class="block">
+            <img :src="OnPlay" style="height: 6rem;" @click="listen()"/>
+          </el-col>
+          <el-col :span="18" class="block">
+            &nbsp;
+          </el-col>
+          <el-col :span="4" >
+            <img :src="heartImg" style="height: 4rem;margin-top: -20rem;"/>
+          </el-col>
+        </el-row>
+      </div>
+      <audio :src="music" id="audio" @timeupdate="updateTime" @ended="audioEnd()"></audio>
+    </div>
+	</body>
+  <script>
+    new Vue({
+      el: '#app',
+      data: function() {
+        return { 
+          play: false,//音频播放暂停
+          music: 'http://syyjspx.com/wiShan/mp3/01.wav',//路径
+          isFont: '~',//当前播放歌词
+          startTime: '0:00',//正在播放时间
+          startTime1: 50,//长在播放秒数
+          isTime: 0,//调整时长
+          endTime: '0:00',//总时间
+          endTime1: 80,//总秒数
+          OnPlay: 'img/play.png',//播放暂停按钮
+          heartImg: 'img/heart2.png',//点赞按钮
+          oLRC: '',
+          lrcObj: {}
+         }
+      },
+      //页面加载就会执行
+      mounted:function(){
+        
+        //获取播放器
+        let audiu0 = document.getElementById('audio')
+        //加载音频文件
+        audiu0.load()
+        //获取结束时间
+        const isThis = this
+        audiu0.oncanplay = function () {  
+          isThis.endTime1 = parseInt(audiu0.duration)
+          isThis.endTime = isThis.formatDuring(isThis.endTime1)
+        }
+        //执行音频文件播放
+        this.listen()
+        this.importLrc()
+      },
+      methods: {
+        //处理播放暂停事件
+        listen: function() {
+          //获取播放器
+          let audiu0 = document.getElementById('audio')
+          //判断现在是播放还是暂停,并改变状态和图片路径
+          if (this.play) {
+            audiu0.play()
+            this.play = !this.play
+            this.OnPlay = 'img/pause.png'
+          } else{
+            audiu0.pause()
+            this.play = !this.play
+            this.OnPlay = 'img/play.png'
+          }
+        },
+        //监听音频播放的时间
+        updateTime: function (e) {
+          //获取当前播放到那个时间
+          let isThisTime = this.startTime1 = parseInt(e.target.currentTime)
+          //将秒数转为分钟秒数
+          this.startTime = this.formatDuring(this.startTime1)
+          //获取百分比并转为整数赋值给进度条
+          this.isTime = parseInt(this.GetPercent(this.startTime1,this.endTime1))
+          
+          let vatis = this.lrcObj.get(isThisTime)
+          console.log(vatis)
+          if (vatis =='' || vatis == null) {
+              return ;
+          }
+          this.isFont = vatis
+        },
+        //点击进度条
+        updateSlider: function(e){
+          //获取播放器
+          let audiu0 = document.getElementById('audio')
+          //获取百分比
+          let percent = this.isTime / 100
+          //获取需要跳转的时间
+          audiu0.currentTime = percent * this.endTime1
+        },
+        //监听音频文件播放结束
+        audioEnd: function (){
+          this.play = !this.play
+          this.OnPlay = 'img/play.png'
+        },
+        //将秒数转化为 "分钟:秒数"
+        formatDuring: function (mss) {
+          // 得到分钟数
+          var minutes = parseInt(mss / 60, 10)
+          // 得到秒数
+          var seconds = parseInt(mss % 60)
+          //判断小于10则加上一个0
+          if(minutes < 10){
+            minutes = '0' + minutes
+          }
+          if(seconds < 10){
+            seconds = '0' + seconds
+          }
+          return minutes + ':' + seconds
+        },
+        /// 求百分比
+        GetPercent: function (num, total) {
+            /// <param name="num">当前数</param>
+            /// <param name="total">总数</param>
+            num = parseFloat(num);
+            total = parseFloat(total);
+            if (isNaN(num) || isNaN(total)) {
+                return "-";
+            }
+            return (Math.round(num / total * 10000) / 100.00)
+        },
+        importLrc: function () {
+          axios.get('http://syyjspx.com/wiShan/lrc/%E6%9C%B1%E5%AD%90%E5%AE%B6%E8%AE%AD.LRC').then((response) =>{
+            this.oLRC = response.data
+            this.lrcObj = this.lrcForObj(this.oLRC)
+            console.log(this.lrcObj)
+          })
+        },
+        lrcForObj: function (text){
+          //先按行分割
+          var lyric = text.split('\r\n')
+          //获取歌词行数
+          var _l = lyric.length;
+          //新建一个数组存放最后结果
+          var lrc = new Map();
+          for(i=0;i<_l;i++) {
+            //正则匹配播放时间
+            var d = lyric[i].match(/\[\d{2}:\d{2}((\.|\:)\d{2})\]/g);
+            //以时间为分割点分割每行歌词，数组最后一个为歌词正文
+            var t = lyric[i].split(d);
+            if(d != null) { //过滤掉空行等非歌词正文部分
+                //换算时间，保留两位小数
+                var dt = String(d).split(':'); 
+                let a1 = parseInt(dt[0].split('[')[1])*60
+                let a2 =parseFloat(dt[1].split(']')[0])
+                var _t = Math.round(a1 + a2); 
+                lrc.set(_t,t[1]);
+            }
+          }
+          return lrc;
+        }
+      },
+      watch:{
+        'startTime1' : function(e) {
+          this.startTime = this.formatDuring(e)
+          this.isTime = parseInt(this.GetPercent(this.startTime1,this.endTime1))
+        },
+      }
+    })
+  </script>
+</html>

@@ -1,0 +1,62 @@
+body,html{
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+.b1{
+  border: 1px solid red;
+}
+.conment{
+  width: 100%;
+  height: 100%;
+  background-image: url(../img/bg.png);
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment:fixed;
+  text-align: center;
+  overflow-x: hidden;
+}
+.top{
+  margin: 0 auto;
+  width: 100%;
+}
+.conmentVal{
+  height: 50%;
+  padding: 2rem;
+  overflow: auto;
+  
+}
+.titleVal{
+  font-size: 3.5rem;
+  font-weight: 600;
+}
+.subject{
+  margin-top: 2rem;
+  text-align: left;
+  text-indent: 4rem;
+  padding-left: 1rem;
+}
+.fontVal{
+  display: block;
+  text-align: left;
+  font-family: "KaiTi";
+  font-size: 2.5rem;
+  letter-spacing: 0.2rem;
+  line-height: 4.5rem;
+}
+.functionVal{
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: "KaiTi";
+  letter-spacing: 0.2rem;
+  font-weight: 600;
+  color: rgba(0,78,97);
+}
+.isFont{
+  font-size: 3rem;
+}
+.block{
+  margin-top: 0.5rem;
+}
